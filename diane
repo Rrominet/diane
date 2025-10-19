@@ -1,0 +1,65 @@
+#!/usr/bin/env python3
+
+import config
+import ai
+ai.messages.append({"role": "assistant", "content": config.config.greeting})
+print ("Diana : " + config.config.greeting)
+import sys
+from ml import log
+import parser
+
+from ml import args
+from ml import commands
+
+cmds = commands.Commands()
+
+def doc(dum): 
+    print ("Data infos :")
+    print ("\tThe model version is in the file data/model")
+    print ("\tThe context give into the AI is in the file data/context")
+    print ("\tThe api-keys are in the file data/api-keys")
+    print ("\tYou can add greetings phrase in the file data/greetings")
+    print ("----")
+    print ("Commands :")
+    for c in cmds.commands :
+        print ("\t" + c + " : " + cmds.commands[c].name + " - " + cmds.commands[c].description)
+
+cmds.create("doc", doc, "Documentation")
+cmds.create("help", doc, "Documentation")
+cmds.create("rules", parser.printRules, "Parser Rules", "Show rules in the input Parser")
+cmds.create("model", config.askModel, "Update the Model", "Change the model used by Claude")
+cmds.create("api-keys", config.askApiKey, "Update the API Keys", "Change the api-keys used by Claude in the back-end.\nYou should have created them on the anthropic website backend")
+cmds.create("config", config._log, "Show Config", "Show the current config.")
+cmds.create("edit-context", config.editContext, "Edit Context", "Edit the context file in your chosen text editor.")
+
+def main () : 
+    for arg in args.allPositional() :
+        cmds.exec(arg)
+        return;
+
+    while True :
+        res = input ("You : ")
+        if res == "exit" :
+            break
+        if cmds.has(res) :
+            cmds.exec(res)
+            continue
+        if(res == "") :
+            continue
+        print ("\rParsing...\r", end="", flush=True)
+        try : 
+            res = parser.parsed(res)
+        except Exception as e :
+            log.print ("Error : " + str(e), "red")
+            continue
+        print ("\rSending...\r", end="", flush=True)
+        msg , code = ai.send(res)
+        print (msg)
+        if (code != "") :
+            print ("\rExecuting code...\r", end="", flush=True)
+            res = ai.executePython(code)
+            log.print("Code Excuted.       ", "green")
+            print (res)
+        log.print ("-----------", "grey")
+
+main()

@@ -1,0 +1,43 @@
+#!/usr/bin/env python3
+installdir = "/opt/diane"
+
+import os
+import shutil
+
+os.system("apt install python3-pydantic -y")
+os.system("apt install python3-httpx -y")
+os.system("apt install python3-docstring-parser -y")
+
+os.system("git clone https://github.com/Rrominet/py-utils")
+os.chdir("./py-utils")
+os.system("chmod +x ./install")
+os.system("./install")
+os.chdir("..")
+os.system("rm -rf ./py-utils")
+
+#Install Anthropic SDK
+os.system("git clone https://github.com/anthropics/anthropic-sdk-python/")
+
+os.makedirs(installdir, exist_ok=True)
+
+shutil.copy("diane", installdir)
+shutil.copy("config.py", installdir)
+shutil.copy("ai.py", installdir)
+shutil.copy("parser.py", installdir)
+
+try : 
+    shutil.copytree("data", installdir + "/data")
+except : 
+    print ("Data directory already there. skipping.");
+    pass
+
+if os.path.isdir(installdir + "/anthropic-sdk-python") :
+    shutil.rmtree(installdir + "/anthropic-sdk-python")
+
+if (os.path.isdir("anthropic-sdk-python")) :
+    shutil.copytree("anthropic-sdk-python", installdir + "/anthropic-sdk-python")
+
+os.system("chmod +x " + installdir + "/diane")
+os.system("ln -s " + installdir + "/diane /usr/local/bin/diane")
+
+print ("Diane installed in " + installdir)
