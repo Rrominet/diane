@@ -14,8 +14,16 @@ class Config :
         self.greeting = "Hey ! What do we do today ?"
         self.variables = {}
 
-        #TODO: should be modifiable
-        self.py = "/usr/bin/env python3" 
+        if os.path.exists("/usr/bin/python3"): 
+            self.py = "/usr/bin/python3"
+        elif os.path.exists("/usr/bin/python"): 
+            self.py = "/usr/bin/python"
+        elif os.path.exists("/usr/local/bin/python3"): 
+            self.py = "/usr/local/bin/python3"
+        elif os.path.exists("/usr/local/bin/python"): 
+            self.py = "/usr/local/bin/python"
+        else : 
+            self.py = "python3"
 
         if not os.path.exists(pdir) :
             os.mkdir(pdir)
