@@ -37,9 +37,8 @@ rm -rf ./diane  # Optional: remove the git repo once installed
 
 Done. That simple.
 > [!NOTE]
-> The install script run the `apt` command, so if you're on a distribution that is not debian based. You'll need to run the equivalent yourself.  
-> If you're on Windows or MacOS well... Good luck :)  
-> Seriously tough, I will make a Windows and MacOS install script in the future. 
+> The install script should work on any major distros.
+> If you have error when installing the packages, just install them manually after running the install script with `pip`.
 
 ## Usage
 

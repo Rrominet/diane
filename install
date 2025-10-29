@@ -4,16 +4,15 @@ installdir = "/opt/diane"
 import os
 import shutil
 
-os.system("apt install python3-pydantic -y")
-os.system("apt install python3-httpx -y")
-os.system("apt install python3-docstring-parser -y")
-
 os.system("git clone https://github.com/Rrominet/py-utils")
 os.chdir("./py-utils")
 os.system("chmod +x ./install")
 os.system("./install")
 os.chdir("..")
 os.system("rm -rf ./py-utils")
+
+from ml import packages
+packages.install(["python3-pydantic", "python3-httpx", "python3-docstring-parser"])
 
 #Install Anthropic SDK
 os.system("git clone https://github.com/anthropics/anthropic-sdk-python/")
