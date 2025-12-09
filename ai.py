@@ -16,8 +16,10 @@ last_code_result = ""
 
 def send(to_send, model=config.model, context=config.context, max_tokens=8128) : 
     global messages
-    if last_code_result != "" :
-        to_send += "\n\nFYI: Your Last python code result was:\n" + last_code_result
+    if not config.useContext :
+        context = ""
+        if last_code_result != "" :
+            to_send += "\n\nFYI: Your Last python code result was:\n" + last_code_result
 
     if(to_send == "") :
         return "", ""

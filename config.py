@@ -1,5 +1,6 @@
 from ml import fileTools as ft
 from ml import log
+from ml import args
 import os
 import random
 import json
@@ -13,6 +14,7 @@ class Config :
         self.textEditor = ""
         self.greeting = "Hey ! What do we do today ?"
         self.variables = {}
+        self.useContext = True
 
         if os.path.exists("/usr/bin/python3"): 
             self.py = "/usr/bin/python3"
@@ -100,6 +102,22 @@ class Config :
         except:
             log.print("Error : impossible to parse the variable file", "red")
 
+    def readUseContext(self): 
+        filepath = os.path.join(pdir, "no-context")
+        if os.path.exists(filepath) :
+            self.useContext = False
+        else :
+            self.useContext = True
+
+    def setUseContext(self, value) :
+        self.useContext = value
+        if value :
+            try: 
+                os.remove(os.path.join(pdir, "no-context"))
+            except : pass
+        else :
+            ft.write("", os.path.join(pdir, "no-context"))
+
     def load(self): 
         self.readModel()
         self.readContext()
@@ -107,11 +125,13 @@ class Config :
         self.loadGreeting()
         self.loadVariables()
         self.readTextEditor()
+        self.readUseContext()
 
     def log(self): 
         log.print("Model : " + self.model, "grey")
         log.print("API key : " + self.apiKey, "grey") 
         log.print("Text editor : " + self.textEditor, "grey")
+        log.print("Use context : " + str(self.useContext), "grey")
 
 
 config = Config()
@@ -128,3 +148,12 @@ def _log(dum) :
 
 def editContext(dum) : 
     config.editContext()
+
+def setUseContext(dum) : 
+    if (len(args.allPositional()) < 2) : 
+        print ("Usage : set-use-context [true|false]")
+        return
+    if (args.allPositional()[1] == "true") :
+        config.setUseContext(True)
+    else :
+        config.setUseContext(False)

@@ -31,6 +31,7 @@ cmds.create("model", config.askModel, "Update the Model", "Change the model used
 cmds.create("api-keys", config.askApiKey, "Update the API Keys", "Change the api-keys used by Claude in the back-end.\nYou should have created them on the anthropic website backend")
 cmds.create("config", config._log, "Show Config", "Show the current config.")
 cmds.create("edit-context", config.editContext, "Edit Context", "Edit the context file in your chosen text editor.")
+cmds.create("set-use-context", config.setUseContext, "Use or Not the context window.", "Use or not the context window for Claude. Do you want a totally blank Claude ?")
 
 def main () : 
     for arg in args.allPositional() :
