@@ -35,7 +35,11 @@ def send(to_send, model=config.model, context=config.context, max_tokens=8128) :
     except Exception as e :
         print(e)
         return "", ""
-    text = response.content[0].text
+    text = ""
+    for m in response.content : 
+        if m.text is not None :
+            text += m.text + "\n"
+    text = text.strip()
     tmp = text.split("::code::")  
     text = tmp[0]
     code = ""

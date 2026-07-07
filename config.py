@@ -88,7 +88,7 @@ class Config :
             return
         data = ft.read(filepath)
         ls = data.split("\n")
-        idx = random.randint(0, len(ls) - 1)
+        idx = random.randint(0, len(ls) - 2)
         self.greeting = ls[idx]
 
     def loadVariables(self): 
